@@ -1,14 +1,231 @@
-clear all;
-%%Plotting the Intensities of Polarization Tests
+function varargout = GuiforIntensity2(varargin)
+% GUIFORINTENSITY2 MATLAB code for GuiforIntensity2.fig
+%      GUIFORINTENSITY2, by itself, creates a new GUIFORINTENSITY2 or raises the existing
+%      singleton*.
+%
+%      H = GUIFORINTENSITY2 returns the handle to a new GUIFORINTENSITY2 or the handle to
+%      the existing singleton*.
+%
+%      GUIFORINTENSITY2('CALLBACK',hObject,eventData,handles,...) calls the local
+%      function named CALLBACK in GUIFORINTENSITY2.M with the given input arguments.
+%
+%      GUIFORINTENSITY2('Property','Value',...) creates a new GUIFORINTENSITY2 or raises the
+%      existing singleton*.  Starting from the left, property value pairs are
+%      applied to the GUI before GuiforIntensity2_OpeningFcn gets called.  An
+%      unrecognized property name or invalid value makes property application
+%      stop.  All inputs are passed to GuiforIntensity2_OpeningFcn via varargin.
+%
+%      *See GUI Options on GUIDE's Tools menu.  Choose "GUI allows only one
+%      instance to run (singleton)".
+%
+% See also: GUIDE, GUIDATA, GUIHANDLES
 
+% Edit the above text to modify the response to help GuiforIntensity2
+
+% Last Modified by GUIDE v2.5 25-Jun-2018 15:57:25
+
+% Begin initialization code - DO NOT EDIT
+gui_Singleton = 1;
+gui_State = struct('gui_Name',       mfilename, ...
+                   'gui_Singleton',  gui_Singleton, ...
+                   'gui_OpeningFcn', @GuiforIntensity2_OpeningFcn, ...
+                   'gui_OutputFcn',  @GuiforIntensity2_OutputFcn, ...
+                   'gui_LayoutFcn',  [] , ...
+                   'gui_Callback',   []);
+if nargin && ischar(varargin{1})
+    gui_State.gui_Callback = str2func(varargin{1});
+end
+
+if nargout
+    [varargout{1:nargout}] = gui_mainfcn(gui_State, varargin{:});
+else
+    gui_mainfcn(gui_State, varargin{:});
+end
+% End initialization code - DO NOT EDIT
+
+
+% --- Executes just before GuiforIntensity2 is made visible.
+function GuiforIntensity2_OpeningFcn(hObject, eventdata, handles, varargin)
+% This function has no output args, see OutputFcn.
+% hObject    handle to figure
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+% varargin   command line arguments to GuiforIntensity2 (see VARARGIN)
+
+% Choose default command line output for GuiforIntensity2
+handles.output = hObject;
+% handles.skip = 0;
+% handles.freqpol =0;
+% handles.freqcam = 0;
+% handles.totalframes =0;
+% handles.bright =0;
+% Update handles structure
+guidata(hObject, handles);
+
+% UIWAIT makes GuiforIntensity2 wait for user response (see UIRESUME)
+% uiwait(handles.figure1);
+
+
+% --- Outputs from this function are returned to the command line.
+function varargout = GuiforIntensity2_OutputFcn(hObject, eventdata, handles) 
+% varargout  cell array for returning output args (see VARARGOUT);
+% hObject    handle to figure
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Get default command line output from handles structure
+varargout{1} = handles.output;
+
+
+% --- Executes on selection change in listbox2.
+function listbox2_Callback(hObject, eventdata, handles)
+% hObject    handle to listbox2 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: contents = cellstr(get(hObject,'String')) returns listbox2 contents as cell array
+%        contents{get(hObject,'Value')} returns selected item from listbox2
+
+
+% --- Executes during object creation, after setting all properties.
+function listbox2_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to listbox2 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: listbox controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function Skip_Callback(hObject, eventdata, handles)
+
+% hObject    handle to Skip (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of Skip as text
+%        str2double(get(hObject,'String')) returns contents of Skip as a double
+handles.skip = str2double(get(hObject,'String'));
+guidata(hObject, handles);
+
+
+
+% --- Executes during object creation, after setting all properties.
+function Skip_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to Skip (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function PolarizationFrequency_Callback(hObject, eventdata, handles)
+% hObject    handle to PolarizationFrequency (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of PolarizationFrequency as text
+%        str2double(get(hObject,'String')) returns contents of PolarizationFrequency as a double
+handles.freqpol = str2double(get(hObject,'String'));
+guidata(hObject, handles);
+% --- Executes during object creation, after setting all properties.
+
+
+
+
+
+function PolarizationFrequency_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to PolarizationFrequency (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+% --- Executes during object creation, after setting all properties.
+
+
+
+function CameraFrequency_Callback(hObject, eventdata, handles)
+% hObject    handle to CameraFrequency (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of CameraFrequency as text
+%        str2double(get(hObject,'String')) returns contents of CameraFrequency as a double
+handles.camfreq = str2double(get(hObject,'String'));
+guidata(hObject, handles);
+
+% --- Executes during object creation, after setting all properties.
+function CameraFrequency_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to CameraFrequency (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function FramesinAq_Callback(hObject, eventdata, handles)
+% hObject    handle to FramesinAq (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of FramesinAq as text
+%        str2double(get(hObject,'String')) returns contents of FramesinAq as a double
+handles.framest = str2double(get(hObject,'String'));
+guidata(hObject, handles);
+
+% --- Executes during object creation, after setting all properties.
+function FramesinAq_CreateFcn(hObject, eventdata, handles)
+
+% hObject    handle to FramesinAq (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+% --- Executes on button press in pushbutton2.
+function pushbutton2_Callback(hObject, eventdata, handles)
+%%Plotting the Intensities of Polarization Tests
+guidata(hObject, handles);
 [name,path] = uigetfile('*.*');
 M = importdata([path,name],' ',1);
 data = M.data;
+skip = handles.skip;
+freqpol = handles.freqpol;
+freqcam =handles.camfreq;
+totalframes = handles.framest;
+radio = handles.radio;
+disp(radio);
+bright = radio;
+
 % USE THIS: 'U:\Documents\2 Summer 2018\2_1_MMStack_Pos0_ome.txt'
 
 % data(x,y,t(frame),i)
 %%
 % find min and max points in the x and y directions
+
 xmax = max(data(:,1));
 ymax = max(data(:,2));
 xmin = min(data(:,1));
@@ -39,11 +256,7 @@ for j = 1:(sizey-1) %ymax  % j < ymax
     ytemp = ones(1, sizex)*(j+1); %*j;
     y = horzcat(y, ytemp);
 end
-skip = input('At what frame does the first full polarization start?');
-freqpol = input('Yo dog, what be da polar freak? Yeah! Ya know?' );
-freqcam = input('What be da cam freak, ma man?' );
-totalframes = input('How many frames in aquisition, dog?');
-bright = input('input "1" starting on bright polarization and "0" for dark, anything else to ignore');
+
 offset = 1.5; % change when calibrated to scale brighter polarization
 totalt = totalframes/freqcam;
 numberofpol = 2*totalt*freqpol;
@@ -63,14 +276,6 @@ while k < evenpol -1 %%number of points and/or num of voltage flipflops
       if m == 1 || m == frameperpol
           continue
       end
-
-%     intensity = data(frames*k+m,4);   %% from file
-%     pointx = data(frames*k+m,1);      %% from file
-%     pointy = data(frames*k+m,2);      %% from file
-%     xbin = round(pointx, -1);   %% round points to bin size
-%     ybin = round(pointy, -1);
-%     newarray = zeros(sizex, sizey);
-    %newarray(xbin, ybin) = intensity;
 
     intensity = data(currpt,4);   %% from file
     pointx = data(currpt,1);      %% from file
@@ -177,7 +382,7 @@ for c3 = 1:10;
    green(:,c3,:) = ([0, 1, 0]/10)*(11-c3);
 end
 
-%%csi = reshape(colorscaleimage,[10,3,3]) %% color scale image
+
 csi =[red; redyellow; yellow; greenyellow; green];
 csi = rot90(csi, -1)
 figure(2);
@@ -185,26 +390,21 @@ newcolor = rot90(newcolor);
 newcolor = flipud(newcolor);
 shadedcolor = rot90(shadedcolor);
 shadedcolor = flipud(shadedcolor);
-%newcolor = fliplr(newcolor);
+
 imagesc(shadedcolor);
 imagesc(csi);
 
-%%newcolor = (newcolor, [sizey, sizex, 3]);
+% hObject    handle to pushbutton2 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
 
 
-%doesn't like permute; too few arguments?? But still does other plot.
+% --- Executes on button press in radiobutton1.
+function radiobutton1_Callback(hObject, eventdata, handles)
+% hObject    handle to radiobutton1 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
 
-
-
-
-%% Graveyard
-
-% data = importdata(filename);
-% uiimport('U:\Documents\2 Summer 2018\2_1_MMStack_Pos0_ome.txt',1)
-
-%xmax = max(data(1,:));
-%z = zeros(sizx,sizyy);
-%w = zeros(sizx,sizyy);
-%z = zeros(length(sizex),length(sizey));
-%w = zeros(length(sizex),length(sizey));
-%maxi = max(data(:,4));
+% Hint: get(hObject,'Value') returns toggle state of radiobutton1
+handles.radio = get(hObject,'Value');
+guidata(hObject, handles);
