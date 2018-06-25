@@ -1,0 +1,210 @@
+clear all;
+%%Plotting the Intensities of Polarization Tests
+
+[name,path] = uigetfile('*.*');
+M = importdata([path,name],' ',1);
+data = M.data;
+% USE THIS: 'U:\Documents\2 Summer 2018\2_1_MMStack_Pos0_ome.txt'
+
+% data(x,y,t(frame),i)
+%%
+% find min and max points in the x and y directions
+xmax = max(data(:,1));
+ymax = max(data(:,2));
+xmin = min(data(:,1));
+ymin = min(data(:,2));
+pixel = 10;                          %can change
+sizex = round((xmax - xmin)/pixel);  %range per pixel
+sizey = round((ymax - ymin)/pixel);
+z = zeros(sizex, sizey);
+w = zeros(sizex, sizey);
+x = 1:sizex; % xmin:xmax;
+i = 1;   % i = 0;
+j = ymin;
+y = ones(1, sizex); %*j;
+k = 0;   % k = 0;
+m = 1;   % m = 0;
+
+
+for i = 1:(sizey - 1)  % i < (sizey - 2)
+    arrayxtemp = 1:sizex; %xmin:xmax;
+    x = horzcat(x,arrayxtemp);
+    %i = i+1;
+end
+      %Problem with x and y lengths here!!!
+      %Probably should not change x length in for loop above
+      
+for j = 1:(sizey-1) %ymax  % j < ymax
+    %j = j+1;
+    ytemp = ones(1, sizex)*(j+1); %*j;
+    y = horzcat(y, ytemp);
+end
+skip = input('At what frame does the first full polarization start?');
+freqpol = input('Yo dog, what be da polar freak? Yeah! Ya know?' );
+freqcam = input('What be da cam freak, ma man?' );
+totalframes = input('How many frames in aquisition, dog?');
+bright = input('input "1" starting on bright polarization and "0" for dark, anything else to ignore');
+offset = 1.5; % change when calibrated to scale brighter polarization
+totalt = totalframes/freqcam;
+numberofpol = 2*totalt*freqpol;
+frameperpol = totalframes/(numberofpol);
+disp(numberofpol);
+disp(frameperpol);
+                                 %%datapts = round(length(data)/flip); %data points per polar segment
+currpt = skip - 1;
+evenpol = numberofpol-rem(numberofpol,2);
+disp(frameperpol)
+while k < evenpol -1 %%number of points and/or num of voltage flipflops
+    k = k + 1;
+    m = 0;
+    while data(currpt,3) < frameperpol*k - 1  %% for m = 1:datapts %m = 1:frames %% number of points in polarization
+      m = m + 1;
+      currpt = currpt+1;
+      if m == 1 || m == frameperpol
+          continue
+      end
+
+%     intensity = data(frames*k+m,4);   %% from file
+%     pointx = data(frames*k+m,1);      %% from file
+%     pointy = data(frames*k+m,2);      %% from file
+%     xbin = round(pointx, -1);   %% round points to bin size
+%     ybin = round(pointy, -1);
+%     newarray = zeros(sizex, sizey);
+    %newarray(xbin, ybin) = intensity;
+
+    intensity = data(currpt,4);   %% from file
+    pointx = data(currpt,1);      %% from file
+    pointy = data(currpt,2);      %% from file
+    xbin = round(pointx-xmin, -1)/10;   %% round points to bin size
+    ybin = round(pointy-ymin, -1)/10;
+    if xbin==0
+        xbin=1;
+    end
+    if ybin ==0
+        ybin =1;
+    end
+    newarray = zeros(sizex, sizey); 
+
+        
+        if rem(m, 2) == 0
+                %% add intensiy to bin 1
+                if bright == 1
+                    intensity = intensity/offset;
+                end
+                newarray(xbin, ybin) = intensity;
+                z = z + newarray;
+        else
+                %% add intensity to bin 2
+                if bright == 0
+                    intensity = intensity/offset;
+                end          
+                newarray(xbin, ybin) = intensity;
+                w = w + newarray;
+        end
+        
+%         if datapts*k+m==length(data)
+%         break
+%         end  
+       
+    end
+    
+%     if datapts*k+m==length(data)
+%         break
+%     end
+end
+
+intensityarray = (w + z);
+
+intensityarray = reshape(intensityarray,[1,(sizex*sizey)]);
+%scatter(x,y,intensityarray,colorarray)
+maxi = max(intensityarray);
+scalei = maxi / 500;
+sizei = intensityarray / scalei;
+p = 1;
+q = 1;
+c1 =0;
+c2 =0;
+
+colorarray = zeros(1,3,sizex, sizey);
+for p = 1:sizex  % p < xmax
+    for q = 1:sizey  % q < ymax
+    
+    maxc = max(w(p,q), z(p,q));
+    scalec = maxc/1;
+    if w(p,q) == 0
+       c1 = 0;
+    else
+       c1 = w(p,q)/scalec;
+    end
+   
+    if z(p,q) == 0
+       c2 = 0;
+    else
+       c2 = z(p,q)/scalec;
+    end
+       
+
+    colorarray2(p,q,:,:) = [c1 , c2, 0 ];
+
+    
+    end
+end
+recolorarray = reshape(colorarray,[(sizex*sizey),3]);
+recolorarray2 = reshape(colorarray2,[(sizex*sizey),3]);
+sizei=sizei+.001;
+figure(1);
+ax = gca;
+scatter(x,y,sizei,recolorarray2, 'filled')
+ax.YDir = 'reverse';
+
+newcolor = reshape(recolorarray2, sizex, sizey, 3);
+shadei = sizei/500;
+shadeiarray = [ shadei; shadei; shadei];
+shadeiarray = transpose(shadeiarray);
+shadedcolor = shadeiarray.*recolorarray2;
+shadedcolor = reshape(shadedcolor, sizex, sizey, 3);
+
+red = zeros(1,10,3);
+redyellow = zeros(1,10,3);
+yellow = zeros(1,10,3);
+greenyellow = zeros(1,10,3);
+green = zeros(1,10,3);
+for c3 = 1:10;
+   red(:,c3,:) = ([1, 0, 0]/10)*(11-c3);
+   redyellow(:,c3,:) = ([1, .5, 0]/10)*(11-c3);
+   yellow(:,c3,:) = ([1,1, 0]/10)*(11-c3);
+   greenyellow(:,c3,:) = ([.5, 1, 0]/10)*(11-c3);
+   green(:,c3,:) = ([0, 1, 0]/10)*(11-c3);
+end
+
+%%csi = reshape(colorscaleimage,[10,3,3]) %% color scale image
+csi =[red; redyellow; yellow; greenyellow; green];
+csi = rot90(csi, -1)
+figure(2);
+newcolor = rot90(newcolor);
+newcolor = flipud(newcolor);
+shadedcolor = rot90(shadedcolor);
+shadedcolor = flipud(shadedcolor);
+%newcolor = fliplr(newcolor);
+imagesc(shadedcolor);
+imagesc(csi);
+
+%%newcolor = (newcolor, [sizey, sizex, 3]);
+
+
+%doesn't like permute; too few arguments?? But still does other plot.
+
+
+
+
+%% Graveyard
+
+% data = importdata(filename);
+% uiimport('U:\Documents\2 Summer 2018\2_1_MMStack_Pos0_ome.txt',1)
+
+%xmax = max(data(1,:));
+%z = zeros(sizx,sizyy);
+%w = zeros(sizx,sizyy);
+%z = zeros(length(sizex),length(sizey));
+%w = zeros(length(sizex),length(sizey));
+%maxi = max(data(:,4));
